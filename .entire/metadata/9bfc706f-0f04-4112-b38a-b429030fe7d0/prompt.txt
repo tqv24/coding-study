@@ -1,0 +1,86 @@
+I'm building a simualtion for robot interaction
+
+---
+
+pip install pybullet gymnasium
+
+---
+
+run them for me
+
+---
+
+done
+
+---
+
+done
+
+---
+
+go ahead
+
+---
+
+import pybullet as p
+import pybullet_data
+import time
+
+# 1. Setup the Physics Engine (GUI mode)
+# Note: If running on remote WSL without a display, use p.DIRECT
+physicsClient = p.connect(p.GUI) 
+p.setAdditionalSearchPath(pybullet_data.getDataPath()) # path for models
+p.setGravity(0, 0, -9.81)
+
+# 2. Load the Environment
+planeId = p.loadURDF("plane.urdf")
+startPos = [0, 0, 0]
+startOrientation = p.getQuaternionFromEuler([0, 0, 0])
+
+# 3. Load a Robot (The KUKA KR210 Arm)
+robotId = p.loadURDF("kuka_iiwa/model.urdf", startPos, startOrientation)
+
+print(f"Robot loaded with ID: {robotId}")
+
+# Add this before your loop
+user_params = []
+for i in range(p.getNumJoints(robotId)):
+    user_params.append(p.addUserDebugParameter(f"Joint_{i}", -3, 3, 0))
+
+# Replace your old loop with this:
+while True:
+    p.stepSimulation()
+    for i in range(len(user_params)):
+        targetPos = p.readUserDebugParameter(user_params[i])
+        p.setJointMotorControl2(robotId, i, p.POSITION_CONTROL, targetPos)
+    time.sleep(1./240.)
+
+p.disconnect()
+
+---
+
+here is the simulation i ran for the robot arm, but i actually need a humanioid robot arm to then i could grab object
+
+---
+
+could we add ai to the simualtion so it could graps object as request
+
+---
+
+starting thread 0
+started thread 0 
+MotionThreadFunc thread started
+ven = Mesa
+ven = Mesa
+
+Robot ready! Type a command and press Enter.
+Examples: 'grab the cube'  |  'release the object'  |  'go home'
+
+Command: grab the cube
+Thinking...
+Command: 
+AI error: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+Command: 
+
+---
+
